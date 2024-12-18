@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Eye Flu Detection
+  </title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+  <style>
+   /* From Uiverse.io by vinodjangid07 */
+   .card {
+     width: fit-content;
+     height: fit-content;
+     background-color: rgb(238, 238, 238);
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     padding: 25px 25px;
+     gap: 20px;
+     box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.055);
+   }
+
+   /* for all social containers*/
+   .socialContainer {
+     width: 52px;
+     height: 52px;
+     background-color: #007bff;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     overflow: hidden;
+     transition-duration: .3s;
+   }
+   /* instagram*/
+   .containerOne:hover {
+     background-color: #d62976;
+     transition-duration: .3s;
+   }
+   /* twitter*/
+   .containerTwo:hover {
+     background-color: #00acee;
+     transition-duration: .3s;
+   }
+   /* linkdin*/
+   .containerThree:hover {
+     background-color: #0072b1;
+     transition-duration: .3s;
+   }
+   /* Whatsapp*/
+   .containerFour:hover {
+     background-color: #128C7E;
+     transition-duration: .3s;
+   }
+
+   .socialContainer:active {
+     transform: scale(0.9);
+     transition-duration: .3s;
+   }
+
+   .socialSvg {
+     width: 17px;
+   }
+
+   .socialSvg path {
+     fill: rgb(255, 255, 255);
+   }
+
+   .socialContainer:hover .socialSvg {
+     animation: slide-in-top 0.3s both;
+   }
+
+   @keyframes slide-in-top {
+     0% {
+       transform: translateY(-50px);
+       opacity: 0;
+     }
+
+     100% {
+       transform: translateY(0);
+       opacity: 1;
+     }
+   }
+
+   /* From Uiverse.io by catraco */
+   .feedback-container {
+     background-color: #fff;
+     border: 1px solid #e5e7eb;
+     display: grid;
+     grid-template-columns: repeat(6, 1fr);
+     gap: 0.5rem;
+     border-radius: 0.75rem;
+     padding: 0.5rem;
+     text-align: center;
+     font-size: 0.875rem;
+   }
+
+   .feedback-container h1 {
+     color: #e5e7eb;
+     font-size: 1.25rem;
+     font-weight: 700;
+     grid-column: span 6;
+   }
+
+   .feedback-container textarea {
+     background-color: #f1f5f9;
+     color: #4b5563;
+     height: 7rem;
+     border: 1px solid #e5e7eb;
+     grid-column: span 6;
+     resize: none;
+     outline: none;
+     border-radius: 0.5rem;
+     padding: 0.5rem;
+     transition: border-color 0.3s;
+   }
+
+   .feedback-container textarea:focus {
+     border-color: #4b5563;
+   }
+
+   .feedback-container button {
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     border-radius: 0.5rem;
+     padding: 0.5rem;
+     transition: border-color 0.3s, background-color 0.3s;
+   }
+
+   .feedback-container button:hover {
+     border-color: #4b5563;
+   }
+
+   .feedback-container button:focus {
+     background-color: #60a5fa;
+   }
+
+   .feedback-container button svg {
+     fill: #4b5563;
+   }
+
+   .feedback-container button:focus svg {
+     fill: #93c5fd;
+   }
+
+   /* From Uiverse.io by ilkhoeri */
+   .dropdown {
+     border: 1px solid #c1c2c5;
+     border-radius: 12px;
+     transition: all 300ms;
+     display: flex;
+     flex-direction: column;
+     min-height: 58px;
+     background-color: white;
+     overflow: hidden;
+     position: relative;
+     inset-inline: auto;
+     max-width: 298px;
+     min-width: 298px;
+   }
+   .dropdown input:where(:checked) ~ .list {
+     opacity: 1;
+     transform: translateY(-3rem) scale(1);
+     transition: all 500ms ease;
+     margin-top: 32px;
+     padding-top: 4px;
+     margin-bottom: -32px;
+   }
+   .dropdown input:where(:not(:checked)) ~ .list {
+     opacity: 0;
+     transform: translateY(3rem);
+     margin-top: -100%;
+     user-select: none;
+     height: 0px;
+     max-height: 0px;
+     min-height: 0px;
+     pointer-events: none;
+     transition: all 500ms ease-out;
+   }
+   .trigger {
+     cursor: pointer;
+     list-style: none;
+     -webkit-user-select: none;
+     -moz-user-select: none;
+     user-select: none;
+     font-weight: 600;
+     color: inherit;
+     width: 100%;
+     display: flex;
+     align-items: center;
+     flex-flow: row;
+     gap: 1rem;
+     padding: 1rem;
+     height: max-content;
+     position: relative;
+     z-index: 99;
+     border-radius: inherit;
+     background-color: white;
+   }
+   .sr-only {
+     position: absolute;
+     width: 1px;
+     height: 1px;
+     padding: 0;
+     margin: -1px;
+     overflow: hidden;
+     clip: rect(0, 0, 0, 0);
+     white-space: nowrap;
+     border-width: 0;
+   }
+   .dropdown input:where(:checked) + .trigger {
+     margin-bottom: 1rem;
+   }
+   .dropdown input:where(:checked) + .trigger:before {
+     rotate: 90deg;
+     transition-delay: 0ms;
+   }
+   .dropdown input:where(:checked) + .trigger::after {
+     content: "Close Dropdown";
+   }
+
+   .trigger:before,
+   .trigger::after {
+     position: relative;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+   }
+   .trigger:before {
+     content: "›";
+     rotate: -90deg;
+     width: 17px;
+     height: 17px;
+     color: #262626;
+     border-radius: 2px;
+     font-size: 26px;
+     transition: all 350ms ease;
+     transition-delay: 85ms;
+   }
+   .trigger::after {
+     content: "Open Dropdown";
+   }
+   .list {
+     height: 100%;
+     max-height: 20rem;
+     width: calc(100% - calc(var(--w-scrollbar) / 2));
+     display: grid;
+     grid-auto-flow: row;
+     overflow: hidden auto;
+     gap: 1rem;
+     padding: 0 1rem;
+     margin-right: -8px;
+     --w-scrollbar: 8px;
+   }
+   .listitem {
+     height: 100%;
+     width: calc(100% + calc(calc(var(--w-scrollbar) / 2) + var(--w-scrollbar)));
+     list-style: none;
+   }
+   .article {
+     padding: 1rem;
+     border-radius: 8px;
+     font-size: 15px;
+     font-weight: 500;
+     text-align: justify;
+     width: 100%;
+     border: 1px solid #c1c2c5;
+     display: inline-block;
+     background-color: white;
+   }
+
+   .webkit-scrollbar::-webkit-scrollbar {
+     width: var(--w-scrollbar);
+     height: var(--w-scrollbar);
+     border-radius: 9999px;
+   }
+   .webkit-scrollbar::-webkit-scrollbar-track {
+     background: #0000;
+   }
+   .webkit-scrollbar::-webkit-scrollbar-thumb {
+     background: #0000;
+     border-radius: 9999px;
+   }
+   .webkit-scrollbar:hover::-webkit-scrollbar-thumb {
+     background: #c1c2c5;
+   }
+
+   /* From Uiverse.io by ahmedyasserdev */
+   .form {
+     position: relative;
+   }
+   .form .input {
+     padding-left: 3rem;
+     padding-right: 3rem;
+   }
+   .form button {
+     position: absolute;
+     top: 50%;
+     transform: translateY(-50%);
+   }
+   .form button svg {
+     width: 17px;
+     height: 16px;
+   }
+
+   /* From Uiverse.io by Jerome-W-90 */
+   .modal {
+     width: 90%;
+     max-width: 500px;
+     margin-left: auto;
+     margin-right: auto;
+     margin-top: 10px;
+     margin-bottom: 10px;
+     background-color: #fff;
+     border-radius: 0.5rem;
+     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+   }
+
+   .modal-header {
+     display: flex;
+     align-items: flex-start;
+     justify-content: space-between;
+     padding: 1.5rem 1.5rem 1rem;
+   }
+
+   .logo-circle {
+     width: 3.5rem;
+     height: 3.5rem;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     border-radius: 50%;
+     background-color: #e9e5ff;
+     fill: #1cc972;
+   }
+
+   .btn-close {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2.25rem;
+     height: 2.25rem;
+     border-radius: 0.25rem;
+     border: none;
+     background-color: transparent;
+     cursor: pointer;
+   }
+
+   .btn-close:hover,
+   .btn-close:focus {
+     background-color: #e9e5ff;
+   }
+
+   .modal-body {
+     padding: 1rem 1.5rem;
+   }
+
+   .modal-title {
+     font-weight: 700;
+   }
+
+   .modal-description {
+     color: #6a6b76;
+   }
+
+   .upload-area {
+     margin-top: 1.25rem;
+     background-color: transparent;
+     padding: 3rem;
+     width: 100%;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     border: 1px dashed #6a6b76;
+   }
+
+   .upload-area:hover,
+   .upload-area:focus {
+     cursor: pointer;
+     border: 1px solid #6a6b76;
+   }
+
+   .upload-area:hover .upload-area-icon,
+   .upload-area:focus .upload-area-icon {
+     transform: scale(1.3);
+     transition-duration: 0.3s;
+   }
+
+   .upload-area-icon {
+     display: block;
+     width: 2.25rem;
+     height: 2.25rem;
+     fill: #1cc972;
+   }
+
+   .upload-area-title {
+     margin-top: 1rem;
+     display: block;
+     font-weight: 700;
+     color: #0d0f21;
+   }
+
+   .upload-area-description {
+     display: block;
+     color: #6a6b76;
+   }
+
+   .upload-area-description strong {
+     color: #1cc972;
+     font-weight: 700;
+   }
+
+   .modal-footer {
+     padding: 1rem 1.5rem 1.5rem;
+     display: flex;
+     justify-content: flex-end;
+   }
+
+   .modal-footer [class*="btn-"] {
+     margin-left: 0.75rem;
+   }
+
+   .btn-secondary,
+   .btn-primary {
+     padding: 0.5rem 1rem;
+     font-weight: 500;
+     border: 2px solid #e5e5e5;
+     border-radius: 0.25rem;
+     background-color: transparent;
+     cursor: pointer;
+   }
+
+   .btn-primary {
+     color: #fff;
+     background-color: #1cc972;
+     border-color: #1cc972;
+     cursor: pointer;
+   }
+  </style>
+ </head>
+ <body class="font-roboto">
+  <header class="bg-white shadow">
+   <div class="bg-blue-100 container mx-auto flex justify-between items-center py-4 px-6">
+    <div class="flex items-center">
+     <img alt="EyeVision Logo" class="h-10" height="50" src="https://storage.googleapis.com/a1aa/image/AfWbljffEYbXPJbLmyOXGxt7PW6IyA4G86meS4mEkMaCclwPB.jpg" width="50"/>
+     <span class="ml-2 text-xl font-bold text-blue-900">
+      EyeVision
+     </span>
+    </div>
+    <nav class="hidden md:flex space-x-4">
+     <a class="text-gray-600 hover:text-blue-900" href="#">
+      Find a Doctor
+     </a>
+     <a class="text-gray-600 hover:text-blue-900" href="#">
+      Blogs
+     </a>
+     <a class="text-gray-600 hover:text-blue-900" href="#">
+      My Reports
+     </a>
+     <a class="text-gray-600 hover:text-blue-900" href="#">
+      Investors
+     </a>
+     <a class="text-gray-600 hover:text-blue-900" href="#">
+      Research
+     </a>
+     <a class="text-gray-600 hover:text-blue-900" href="#">
+      CSR
+     </a>
+     <a class="text-gray-600 hover:text-blue-900" href="#">
+      Contact Us
+     </a>
+    </nav>
+    <div class="flex items-center space-x-4">
+     <a class="text-blue-900 font-bold" href="tel:+919325296264">
+      +91 93252 96264
+     </a>
+     <a class="text-blue-900 font-bold" href="tel:+917350392139">
+      +91 73503 92139 (24/7)
+     </a>
+    </div>
+   </div>
+  </header>
+  <main class="container mx-auto px-6 py-8">
+   <div class="flex flex-col lg:flex-row lg:space-x-8">
+    <div class="lg:w-2/3">
+     <div class="bg-blue-50 p-6 rounded-lg mb-6">
+      <div class="flex items-center bg-white p-4 rounded-lg shadow-lg">
+       <div class="w-1/2">
+        <h2 class="text-2xl font-bold text-blue-900">
+        </h2>
+        <p class="text-blue-900">
+        </p>
+       </div>
+      <div class="w-full flex flex-col lg:flex-row">
+    <div class="w-full lg:w-1/2">
+        <img
+            alt="Person with eye flu"
+            class="w-full h-auto object-contain rounded-lg"
+            src="static/uploads/EyeVision.jpg"
+        />
+    </div>
+</div>
+      </div>
+     </div>
+     <div class="modal">
+       <div class="modal-header">
+         <div class="modal-logo">
+           <span class="logo-circle">
+             <svg
+               xmlns="http://www.w3.org/2000/svg"
+               xmlns:xlink="http://www.w3.org/1999/xlink"
+               width="25"
+               height="25"
+               viewBox="0 0 512 419.116"
+             >
+               <defs>
+                 <clipPath id="clip-folder-new">
+                   <rect width="512" height="419.116"></rect>
+                 </clipPath>
+               </defs>
+               <g id="folder-new" clip-path="url(#clip-folder-new)">
+                 <path
+                   id="Union_1"
+                   data-name="Union 1"
+                   d="M16.991,419.116A16.989,16.989,0,0,1,0,402.125V16.991A16.989,16.989,0,0,1,16.991,0H146.124a17,17,0,0,1,10.342,3.513L227.217,57.77H437.805A16.989,16.989,0,0,1,454.8,74.761v53.244h40.213A16.992,16.992,0,0,1,511.6,148.657L454.966,405.222a17,17,0,0,1-16.6,13.332H410.053v.562ZM63.06,384.573H424.722L473.86,161.988H112.2Z"
+                   fill="var(--c-action-primary)"
+                   stroke=""
+                   stroke-width="1"
+                 ></path>
+               </g>
+             </svg>
+           </span>
+         </div>
+         <button class="btn-close">
+           <svg
+             xmlns="http://www.w3.org/2000/svg"
+             width="24"
+             height="24"
+             viewBox="0 0 24 24"
+           >
+             <path fill="none" d="M0 0h24v24H0V0z"></path>
+             <path
+               d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"
+               fill="var(--c-text-secondary)"
+             ></path>
+           </svg>
+         </button>
+       </div>
+       <div class="modal-body">
+         <p class="modal-title">Upload a file</p>
+         <p class="modal-description">Attach the file below</p>
+         <input type="file" id="imageUpload" class="hidden" accept="image/*"/>
+         <label for="imageUpload" class="upload-area">
+           <span class="upload-area-icon">
+             <svg
+               xmlns="http://www.w3.org/2000/svg"
+               xmlns:xlink="http://www.w3.org/1999/xlink"
+               width="35"
+               height="35"
+               viewBox="0 0 340.531 419.116"
+             >
+               <g id="files-new" clip-path="url(#clip-files-new)">
+                 <path
+                   id="Union_2"
+                   data-name="Union 2"
+                   d="M-2904.708-8.885A39.292,39.292,0,0,1-2944-48.177V-388.708A39.292,39.292,0,0,1-2904.708-428h209.558a13.1,13.1,0,0,1,9.3,3.8l78.584,78.584a13.1,13.1,0,0,1,3.8,9.3V-48.177a39.292,39.292,0,0,1-39.292,39.292Zm-13.1-379.823V-48.177a13.1,13.1,0,0,0,13.1,13.1h261.947a13.1,13.1,0,0,0,13.1-13.1V-323.221h-52.39a26.2,26.2,0,0,1-26.194-26.195v-52.39h-196.46A13.1,13.1,0,0,0-2917.805-388.708Zm146.5,241.621a14.269,14.269,0,0,1-7.883-12.758v-19.113h-68.841c-7.869,0-7.87-47.619,0-47.619h68.842v-18.8a14.271,14.271,0,0,1,7.882-12.758,14.239,14.239,0,0,1,14.925,1.354l57.019,42.764c.242.185.328.485.555.671a13.9,13.9,0,0,1,2.751,3.292,14.57,14.57,0,0,1,.984,1.454,14.114,14.114,0,0,1,1.411,5.987,14.006,14.006,0,0,1-1.411,5.973,14.653,14.653,0,0,1-.984,1.468,13.9,13.9,0,0,1-2.751,3.293c-.228.2-.313.485-.555.671l-57.019,42.764a14.26,14.26,0,0,1-8.558,2.847A14.326,14.326,0,0,1-2771.3-147.087Z"
+                   transform="translate(2944 428)"
+                   fill="var(--c-action-primary)"
+                 ></path>
+               </g>
+             </svg>
+           </span>
+           <span class="upload-area-title">Drag file(s) here to upload.</span>
+           <span class="upload-area-description">
+             Alternatively, you can select a file by <br /><strong
+               >clicking here</strong
+             >
+           </span>
+         </label>
+       </div>
+       <div class="modal-footer">
+         <button class="btn-secondary">Cancel</button>
+         <button class="btn-primary">Upload File</button>
+       </div>
+     </div>
+     <div class="bg-white p-4 rounded-lg shadow-lg mb-6">
+      <h3 class="text-xl font-bold text-blue-900 mb-4">
+       Preview Image
+      </h3>
+      <div id="imagePreview" class="flex justify-center items-center min-h-[300px] border-2 border-dashed border-gray-300">
+       <p class="text-gray-500">
+        No image uploaded
+       </p>
+      </div>
+     </div>
+     <div class="bg-blue-900 text-white text-center py-4 rounded-lg w-full mb-6">
+      <button id="analyzeBtn" class="text-lg font-bold w-full" disabled>
+       Eye Flu Analysis
+      </button>
+     </div>
+     <div class="bg-white p-4 rounded-lg shadow-lg mb-6">
+      <h3 class="text-xl font-bold text-blue-900 mb-4">
+       About Us
+      </h3>
+      <p class="text-gray-700">
+       EyeVision is dedicated to providing top-notch eye care services. Our mission is to ensure that everyone has access to quality eye health solutions. With a team of experienced professionals and advanced technology, we strive to deliver accurate diagnoses and effective treatments.
+      </p>
+     </div>
+     <div class="bg-white p-4 rounded-lg shadow-lg mb-6">
+      <h3 class="text-xl font-bold text-blue-900 mb-4">
+       Services
+      </h3>
+      <h4 class="text-lg font-bold text-blue-900 mb-2">
+       Fast and Accurate Eye Flu Detection
+      </h4>
+      <p class="text-gray-700">
+       Our state-of-the-art eye flu detection service utilizes advanced algorithms and machine learning techniques to quickly and accurately identify eye flu. By uploading an image of your eye, our system can analyze it and provide results within minutes. This service is crucial for early detection and treatment, helping to prevent the spread of infection and ensuring timely medical intervention.
+      </p>
+     </div>
+     <div class="bg-white p-4 rounded-lg shadow-lg mb-6">
+      <h3 class="text-xl font-bold text-blue-900 mb-4">
+       Frequently Asked Questions
+      </h3>
+      <div class="mb-4">
+       <h4 class="text-lg font-bold text-blue-900">
+        Can eye flu recur after treatment?
+       </h4>
+       <p class="text-gray-700">
+        Yes, eye flu can recur, especially if the underlying cause isn't addressed. Good hygiene practices and avoiding irritants can help prevent reoccurrence.
+       </p>
+      </div>
+      <div class="mb-4">
+       <h4 class="text-lg font-bold text-blue-900">
+        How long does eye flu usually last?
+       </h4>
+       <p class="text-gray-700">
+        The duration of eye flu varies depending on the cause. Viral conjunctivitis can last 7–10 days, while bacterial conjunctivitis often clears up within a week with antibiotic treatment. Allergic conjunctivitis may persist as long as you're exposed to the allergen.
+       </p>
+      </div>
+      <div class="mb-4">
+       <h4 class="text-lg font-bold text-blue-900">
+        Can eye flu cause permanent damage to my eyes?
+       </h4>
+       <p class="text-gray-700">
+        While uncomfortable, eye flu typically doesn't cause permanent damage to the eyes. However, if left untreated or if there's an underlying condition, complications can arise. It's essential to seek medical attention if symptoms worsen.
+       </p>
+      </div>
+      <div class="mb-4">
+       <h4 class="text-lg font-bold text-blue-900">
+        Are there any long-term effects of eye flu?
+       </h4>
+       <p class="text-gray-700">
+        In most cases, there are no long-term effects of eye flu. However, persistent or recurrent eye infections might indicate an underlying health issue.
+       </p>
+      </div>
+      <div class="mb-4">
+       <h4 class="text-lg font-bold text-blue-900">
+        Can I wear makeup while I have eye flu?
+       </h4>
+       <p class="text-gray-700">
+        It's best to avoid wearing makeup while you have eye flu to prevent further irritation and the spread of infection.
+       </p>
+      </div>
+     </div>
+     <div class="feedback-container mb-6">
+      <h1 class="text-center text-slate-200 text-xl font-bold col-span-6">Send Feedback</h1>
+      <textarea placeholder="Your feedback..." class="bg-slate-100 text-slate-600 h-28 placeholder:text-slate-600 placeholder:opacity-50 border border-slate-200 col-span-6 resize-none outline-none rounded-lg p-2 duration-300 focus:border-slate-600"></textarea>
+      <button class="fill-slate-600 col-span-1 flex justify-center items-center rounded-lg p-2 duration-300 bg-slate-100 hover:border-slate-600 focus:fill-blue-200 focus:bg-blue-400 border border-slate-200">
+       <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 0 512 512">
+        <path d="M464 256A208 208 0 1 0 48 256a208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm177.6 62.1C192.8 334.5 218.8 352 256 352s63.2-17.5 78.4-33.9c9-9.7 24.2-10.4 33.9-1.4s10.4 24.2 1.4 33.9c-22 23.8-60 49.4-113.6 49.4s-91.7-25.5-113.6-49.4c-9-9.7-8.4-24.9 1.4-33.9s24.9-8.4 33.9 1.4zM144.4 208a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm192-32a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"></path>
+       </svg>
+      </button>
+      <button class="fill-slate-600 col-span-1 flex justify-center items-center rounded-lg p-2 duration-300 bg-slate-100 hover:border-slate-600 focus:fill-blue-200 focus:bg-blue-400 border border-slate-200">
+       <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 0 512 512">
+        <path d="M464 256A208 208 0 1 0 48 256a208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zM174.6 384.1c-4.5 12.5-18.2 18.9-30.7 14.4s-18.9-18.2-14.4-30.7C146.9 319.4 198.9 288 256 288s109.1 31.4 126.6 79.9c4.5 12.5-2 26.2-14.4 30.7s-26.2-2-30.7-14.4C328.2 358.5 297.2 336 256 336s-72.2 22.5-81.4 48.1zM144.4 208a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm192-32a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"></path>
+       </svg>
+      </button>
+      <span class="col-span-2"></span>
+      <button class="bg-slate-100 stroke-slate-600 border border-slate-200 col-span-2 flex justify-center rounded-lg p-2 duration-300 hover:border-slate-600 hover:text-white focus:stroke-blue-200 focus:bg-blue-400">
+       <svg fill="none" viewBox="0 0 24 24" height="30px" width="30px" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linejoin="round" stroke-linecap="round" stroke-width="1.5" d="M7.39999 6.32003L15.89 3.49003C19.7 2.22003 21.77 4.30003 20.51 8.11003L17.68 16.6C15.78 22.31 12.66 22.31 10.76 16.6L9.91999 14.08L7.39999 13.24C1.68999 11.34 1.68999 8.23003 7.39999 6.32003Z"></path>
+        <path stroke-linejoin="round" stroke-linecap="round" stroke-width="1.5" d="M10.11 13.6501L13.69 10.0601"></path>
+       </svg>
+      </button>
+     </div>
+    </div>
+    <aside class="lg:w-1/3">
+     <div class="bg-sky-100 shadow-lg rounded-lg p-6 mb-6">
+      <form class="form relative" id="searchForm">
+        <button class="absolute left-2 -translate-y-1/2 top-1/2 p-1">
+          <svg
+            width="17"
+            height="16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            role="img"
+            aria-labelledby="search"
+            class="w-5 h-5 text-gray-700"
+          >
+            <path
+              d="M7.667 12.667A5.333 5.333 0 107.667 2a5.333 5.333 0 000 10.667zM14.334 14l-2.9-2.9"
+              stroke="currentColor"
+              stroke-width="1.333"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></path>
+          </svg>
+        </button>
+        <input
+          class="input rounded-full px-8 py-3 border-2 border-transparent focus:outline-none focus:border-blue-500 placeholder-gray-400 transition-all duration-300 shadow-md"
+          placeholder="Search for Doctor or Speciality"
+          required=""
+          type="text"
+        />
+        <button type="reset" class="absolute right-3 -translate-y-1/2 top-1/2 p-1">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-5 h-5 text-gray-700"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M6 18L18 6M6 6l12 12"
+            ></path>
+          </svg>
+        </button>
+      </form>
+      <div class="mb-4">
+       <input class="w-full p-3 border border-gray-300 rounded-lg" placeholder="Select Location" type="text"/>
+      </div>
+      <button class="w-full bg-blue-900 text-white py-3 rounded-lg font-bold">
+       Book an Appointment
+      </button>
+     </div>
+     <div class="bg-blue-500 shadow-lg rounded-lg p-6 mb-6">
+      <h3 class="text-lg font-bold text-white mb-4">
+       Get a Call Back
+      </h3>
+      <form id="callbackForm">
+       <div class="mb-4">
+        <input class="w-full p-3 border border-gray-300 rounded-lg" placeholder="Enter Name" type="text" id="name" required/>
+       </div>
+       <div class="mb-4 flex">
+        <span class="bg-gray-200 p-3 border border-gray-300 rounded-l-lg">
+         +91
+        </span>
+        <input class="w-full p-3 border border-gray-300 rounded-r-lg" placeholder="Enter mobile number" type="text" id="mobile" required/>
+       </div>
+       <button type="submit" class="w-full bg-blue-900 text-white py-3 rounded-lg font-bold">
+        Submit
+       </button>
+       <div class="mt-4 flex items-center">
+        <input class="mr-2" type="checkbox" id="terms" required/>
+        <label class="text-white" for="terms">
+         I agree to the terms and conditions
+        </label>
+       </div>
+       <p class="text-white mt-4">
+        Email - eyevision@gmail.com
+       </p>
+      </form>
+     </div>
+     <div class="bg-white p-4 rounded-lg shadow-lg mb-6">
+      <h3 class="text-xl font-bold text-blue-900 mb-4">
+       How to Use Upload and Analysis Feature
+      </h3>
+      <div class="dropdown mb-6">
+       <input
+         hidden=""
+         class="sr-only"
+         name="state-dropdown"
+         id="state-dropdown"
+         type="checkbox"
+       />
+       <label
+         aria-label="dropdown scrollbar"
+         for="state-dropdown"
+         class="trigger"
+       ></label>
+
+       <ul class="list webkit-scrollbar" role="list" dir="auto">
+         <li class="listitem" role="listitem">
+           <article class="article">
+             <strong>Step 1:</strong> Click on the "Upload Image" button and select an image of your eye from your device.
+           </article>
+         </li>
+
+         <li class="listitem" role="listitem">
+           <article class="article">
+             <strong>Step 2:</strong> Once the image is uploaded, it will be displayed in the "Preview Image" section.
+           </article>
+         </li>
+
+         <li class="listitem" role="listitem">
+           <article class="article">
+             <strong>Step 3:</strong> Click on the "Eye Flu Analysis" button to start the analysis process.
+           </article>
+         </li>
+
+         <li class="listitem" role="listitem">
+           <article class="article">
+             <strong>Step 4:</strong> Wait for the analysis to complete. The results will be displayed in a modal popup.
+           </article>
+         </li>
+
+         <li class="listitem" role="listitem">
+           <article class="article">
+             <strong>Step 5:</strong> Review the analysis results and take appropriate action based on the recommendations.
+           </article>
+         </li>
+       </ul>
+      </div>
+     </div>
+    </aside>
+   </div>
+  </main>
+  <footer class="bg-blue-900 text-white py-6 mt-8">
+   <div class="container mx-auto px-6">
+    <div class="flex flex-col md:flex-row justify-between items-center">
+     <div class="mb-4 md:mb-0">
+      <h3 class="text-lg font-bold">
+       EyeVision
+      </h3>
+      <p class="text-sm">
+       Your trusted partner in eye care.
+      </p>
+     </div>
+     <div class="flex space-x-4">
+      <a class="hover:text-gray-300" href="#">
+       Home
+      </a>
+      <a class="hover:text-gray-300" href="#">
+       About Us
+      </a>
+      <a class="hover:text-gray-300" href="#">
+       Services
+      </a>
+      <a class="hover:text-gray-300" href="#">
+       Contact
+      </a>
+     </div>
+    </div>
+    <div class="mt-4 flex justify-center space-x-4">
+     <div class="card">
+      <a href="#" class="socialContainer containerOne">
+       <svg class="socialSvg instagramSvg" viewBox="0 0 16 16"> <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z"></path> </svg>
+      </a>
+      <a href="#" class="socialContainer containerTwo">
+       <svg class="socialSvg twitterSvg" viewBox="0 0 16 16"> <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z"></path> </svg>
+      </a>
+      <a href="#" class="socialContainer containerThree">
+       <svg class="socialSvg linkdinSvg" viewBox="0 0 448 512"><path d="M100.28 448H7.4V148.9h92.88zM53.79 108.1C24.09 108.1 0 83.5 0 53.8a53.79 53.79 0 0 1 107.58 0c0 29.7-24.1 54.3-53.79 54.3zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3V448z"></path></svg>
+      </a>
+      <a href="#" class="socialContainer containerFour">
+       <svg class="socialSvg whatsappSvg" viewBox="0 0 16 16"> <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"></path> </svg>
+      </a>
+     </div>
+    </div>
+    <div class="mt-4 text-center text-sm">
+     <p>
+      &copy; 2024 EyeVision. All rights reserved.
+     </p>
+    </div>
+   </div>
+  </footer>
+
+  <div id="resultModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+   <div class="bg-white p-8 rounded-lg shadow-xl max-w-md w-full">
+    <div id="resultModalContent" class="text-center">
+     <!-- Result will be dynamically inserted here -->
+    </div>
+    <button id="closeResultModal" class="mt-4 w-full bg-blue-900 text-white py-2 rounded-lg">
+     Close
+    </button>
+   </div>
+  </div>
+
+  <script>
+   document.addEventListener('DOMContentLoaded', function() {
+    const imageUpload = document.getElementById('imageUpload');
+    const analyzeBtn = document.getElementById('analyzeBtn');
+    const imagePreview = document.getElementById('imagePreview');
+    const resultModal = document.getElementById('resultModal');
+    const resultModalContent = document.getElementById('resultModalContent');
+    const closeResultModal = document.getElementById('closeResultModal');
+    let uploadedFile = null;
+
+    // Image Upload Handling
+    imageUpload.addEventListener('change', function(event) {
+     const file = event.target.files[0];
+     if (file) {
+      uploadedFile = file;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+       imagePreview.innerHTML = `
+        <img src="${e.target.result}" class="max-h-[300px] max-w-full object-contain" alt="Uploaded Image"/>
+       `;
+       analyzeBtn.disabled = false;
+      };
+      reader.readAsDataURL(file);
+     }
+    });
+
+    // Analysis Button Handling
+    analyzeBtn.addEventListener('click', function() {
+     if (!uploadedFile) {
+      alert('Please upload an image first');
+      return;
+     }
+
+     const formData = new FormData();
+     formData.append('file', uploadedFile);
+
+     // Show loading state in modal
+     resultModal.classList.remove('hidden');
+     resultModalContent.innerHTML = `
+      <div class="flex flex-col items-center">
+       <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-900 mb-4"></div>
+       <p class="text-xl font-bold text-blue-900">Analyzing Image...</p>
+       <p class="text-gray-600 mt-2">Please wait while we process your eye image</p>
+      </div>
+     `;
+
+     fetch('/predict', {
+      method: 'POST',
+      body: formData
+     })
+     .then(response => response.json())
+     .then(data => {
+      if (data.error) {
+       throw new Error(data.error);
+      }
+
+      const isEyeFluDetected = data.result === 'Eye Flu Detected';
+      const resultClass = isEyeFluDetected
+       ? 'text-red-600'
+       : 'text-green-600';
+
+      resultModalContent.innerHTML = `
+       <h4 class="text-2xl font-bold ${resultClass}">
+        ${data.result}
+       </h4>
+       <p class="text-gray-700 mt-2 font-semibold">
+        Confidence: ${(data.confidence * 100).toFixed(2)}%
+       </p>
+       <div class="mt-4 text-left">
+        ${isEyeFluDetected
+         ? '<p class="text-yellow-700">⚠️ Consult an eye specialist for proper treatment.</p>'
+         : '<p class="text-green-700">✅ Your eye appears healthy. Continue maintaining good eye hygiene.</p>'
+        }
+       </div>
+      `;
+     })
+     .catch(error => {
+      resultModalContent.innerHTML = `
+       <h4 class="text-red-600 text-2xl font-bold">
+        Analysis Error
+       </h4>
+       <p class="text-gray-700 mt-2">
+        ${error.message || 'Unable to analyze the image. Please try again.'}
+       </p>
+      `;
+     });
+    });
+
+    // Close Result Modal
+    closeResultModal.addEventListener('click', function() {
+     resultModal.classList.add('hidden');
+    });
+
+    // Get a Call Back Form Handling
+    const callbackForm = document.getElementById('callbackForm');
+    callbackForm.addEventListener('submit', function(event) {
+     event.preventDefault();
+     const name = document.getElementById('name').value;
+     const mobile = document.getElementById('mobile').value;
+     const terms = document.getElementById('terms').checked;
+
+     if (!name || !mobile || !terms) {
+      alert('Please fill in all fields and agree to the terms and conditions');
+      return;
+     }
+
+     // Here you can add your form submission logic, e.g., sending data to the server
+     alert('Callback request submitted successfully!');
+     callbackForm.reset();
+    });
+   });
+  </script>
+ </body>
+</html>
